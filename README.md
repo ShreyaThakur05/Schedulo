@@ -216,7 +216,7 @@ DELETE /gcal/disconnect              Disconnect Google Calendar
 
 ### Backend → Render
 - Root directory: `server-js`
-- Build command: `npm install && npx prisma generate`
+- Build command: `npm install && npx prisma generate && npx prisma db push --accept-data-loss`
 - Start command: `npm start`
 - Add all env vars from `server-js/.env`
 

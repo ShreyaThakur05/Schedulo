@@ -52,8 +52,8 @@ function NavContent({ onClose }) {
       </nav>
       <div className="px-3 py-4 border-t border-white/10 dark:border-[#2a2a3a] flex items-center justify-between">
         <div className="flex items-center gap-2.5 min-w-0">
-          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-xs font-bold shrink-0">A</div>
-          <span className="text-sm font-medium text-white dark:text-[#f0eeff] truncate">Arjun Mehta</span>
+          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-xs font-bold shrink-0">S</div>
+          <span className="text-sm font-medium text-white dark:text-[#f0eeff] truncate">Shreya Thakur</span>
         </div>
         <ThemeToggle />
       </div>

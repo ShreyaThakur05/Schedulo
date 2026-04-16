@@ -9,9 +9,9 @@ async function main() {
   console.log('Seeding database...');
 
   await prisma.user.upsert({
-    where: { email: 'arjun@schedulo.dev' },
+    where: { email: 'shreya@schedulo.dev' },
     update: {},
-    create: { id: SEED_USER_ID, name: 'Arjun Mehta', email: 'arjun@schedulo.dev', timezone: 'Asia/Kolkata' },
+    create: { id: SEED_USER_ID, name: 'Shreya Thakur', email: 'shreya@schedulo.dev', timezone: 'Asia/Kolkata' },
   });
 
   const et30 = await prisma.eventType.upsert({ where: { slug: '30-min-chat' }, update: {}, create: { userId: SEED_USER_ID, name: '30 Min Chat', slug: '30-min-chat', durationMinutes: 30, description: 'A quick 30-minute introductory call.', color: '#6366f1', eventKind: 'ONE_ON_ONE' } });
