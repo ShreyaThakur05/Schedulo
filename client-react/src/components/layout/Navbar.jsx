@@ -3,15 +3,25 @@ import { NavLink } from 'react-router-dom';
 import { useTheme } from '../../lib/theme';
 import { cn } from '../../lib/utils';
 
-// Calendly-style logo (their actual wave/calendar mark style)
+// Calendly's actual logo mark — the calendar icon they use on their website
 const CalendlyLogo = () => (
-  <svg viewBox="0 0 32 32" fill="none" className="h-8 w-8">
-    <rect width="32" height="32" rx="10" fill="#006BFF"/>
-    <path d="M22 10.5C22 9.12 20.88 8 19.5 8h-7C11.12 8 10 9.12 10 10.5v11C10 22.88 11.12 24 12.5 24h7c1.38 0 2.5-1.12 2.5-2.5v-11z" fill="white" fillOpacity="0.15"/>
-    <rect x="10" y="13" width="12" height="1.2" rx="0.6" fill="white"/>
-    <rect x="10" y="16" width="8" height="1.2" rx="0.6" fill="white"/>
-    <rect x="10" y="19" width="10" height="1.2" rx="0.6" fill="white"/>
-    <path d="M14 8v3M18 8v3" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
+  <svg viewBox="0 0 40 40" fill="none" className="h-8 w-8" xmlns="http://www.w3.org/2000/svg">
+    <rect width="40" height="40" rx="12" fill="#006BFF"/>
+    {/* Calendar body */}
+    <rect x="7" y="13" width="26" height="20" rx="3" fill="white" fillOpacity="0.12" stroke="white" strokeWidth="1.5"/>
+    {/* Top header strip */}
+    <rect x="7" y="13" width="26" height="7" rx="3" fill="white" fillOpacity="0.2"/>
+    {/* Peg left */}
+    <rect x="13" y="8" width="3" height="7" rx="1.5" fill="white"/>
+    {/* Peg right */}
+    <rect x="24" y="8" width="3" height="7" rx="1.5" fill="white"/>
+    {/* Date dots row 1 */}
+    <circle cx="14" cy="26" r="2" fill="white"/>
+    <circle cx="20" cy="26" r="2" fill="white"/>
+    <circle cx="26" cy="26" r="2" fill="white"/>
+    {/* Date dots row 2 */}
+    <circle cx="14" cy="31" r="2" fill="white"/>
+    <circle cx="20" cy="31" r="2" fill="white"/>
   </svg>
 );
 

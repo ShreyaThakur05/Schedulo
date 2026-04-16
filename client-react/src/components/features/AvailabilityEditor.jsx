@@ -29,8 +29,11 @@ function Toggle({ active, onChange }) {
 
 function TimeSelect({ value, onChange }) {
   return (
-    <select value={value} onChange={(e) => onChange(e.target.value)}
-      className="w-[90px] px-2 py-1.5 text-xs rounded-lg border border-indigo-200 dark:border-[#2a2a3a] bg-white dark:bg-[#1e1e2a] text-indigo-900 dark:text-[#f0eeff] focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer">
+    <select
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      size={1}
+      className="w-[88px] px-2 py-1.5 text-xs rounded-lg border border-indigo-200 dark:border-[#2a2a3a] bg-white dark:bg-[#1e1e2a] text-indigo-900 dark:text-[#f0eeff] focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer appearance-auto">
       {timeOptions.map((t) => <option key={t} value={t}>{fmt(t)}</option>)}
     </select>
   );
