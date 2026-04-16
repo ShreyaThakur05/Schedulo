@@ -3,9 +3,11 @@ import { NavLink } from 'react-router-dom';
 import { useTheme } from '../../lib/theme';
 import { cn } from '../../lib/utils';
 
-// Real Calendly logo loaded from public/calendly-logo.png
+// Logo wrapped in white bg so blue+cyan both show against the blue sidebar
 const CalendlyMark = () => (
-  <img src="/calendly-logo.png" alt="Calendly" className="h-10 w-auto" />
+  <div className="bg-white rounded-xl px-3 py-1.5">
+    <img src="/calendly-logo.png" alt="Calendly" className="h-8 w-auto" />
+  </div>
 );
 
 // Theme-adaptive nav icons
