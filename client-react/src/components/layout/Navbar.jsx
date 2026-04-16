@@ -12,7 +12,7 @@ function CalendlyMark() {
       <img
         src="/calendly-logo.png"
         alt="Calendly"
-        className="h-14 w-auto object-contain"
+        className="h-20 w-auto object-contain"
       />
     </div>
   );
