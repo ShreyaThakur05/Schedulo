@@ -16,7 +16,7 @@ function StatCard({ label, value, sub, color, bg }) {
 }
 
 export default function Analytics() {
-  const { data, isLoading } = useAnalytics();
+  const { data, isLoading, isError, error } = useAnalytics();
 
   return (
     <>
@@ -27,7 +27,14 @@ export default function Analytics() {
 
       {isLoading ? (
         <div className="flex items-center justify-center py-32"><Spinner className="h-8 w-8" /></div>
-      ) : !data ? null : (
+      ) : isError ? (
+        <div className="bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800/30 rounded-2xl p-6 text-center">
+          <p className="text-red-600 dark:text-red-400 font-medium mb-1">Failed to load analytics</p>
+          <p className="text-red-400 dark:text-red-500 text-sm">{error?.message || 'Could not connect to the server. Make sure the API is running.'}</p>
+        </div>
+      ) : !data ? (
+        <div className="text-center py-32 text-indigo-300">No data available.</div>
+      ) : (
         <div className="flex flex-col gap-6">
           {/* Stat cards — each with its own color */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">

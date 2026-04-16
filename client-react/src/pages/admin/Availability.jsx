@@ -81,7 +81,7 @@ function OverridesSection() {
 }
 
 export default function Availability() {
-  const { data, isLoading } = useAvailability();
+  const { data, isLoading, isError, error } = useAvailability();
   const updateMutation = useUpdateAvailability();
   const { toast } = useToast();
 
@@ -91,7 +91,14 @@ export default function Availability() {
         <h1 className="text-2xl font-bold text-indigo-900 dark:text-[#f0eeff]">Availability</h1>
         <p className="text-indigo-400 dark:text-[#8888aa] mt-1 text-sm">Set your weekly schedule and date-specific overrides.</p>
       </div>
-      {isLoading ? <div className="flex items-center justify-center py-32"><Spinner className="h-8 w-8" /></div> : data ? (
+      {isLoading ? (
+        <div className="flex items-center justify-center py-32"><Spinner className="h-8 w-8" /></div>
+      ) : isError ? (
+        <div className="bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800/30 rounded-2xl p-6 text-center">
+          <p className="text-red-600 dark:text-red-400 font-medium mb-1">Failed to load availability</p>
+          <p className="text-red-400 dark:text-red-500 text-sm">{error?.message || 'Could not connect to the server. Make sure the API is running.'}</p>
+        </div>
+      ) : data ? (
         <div className="flex flex-col gap-6">
           <AvailabilityEditor rules={data.rules} timezone={data.timezone} onSave={async (updated) => { await updateMutation.mutateAsync(updated); toast('Availability saved!'); }} loading={updateMutation.isPending} />
           <OverridesSection />
