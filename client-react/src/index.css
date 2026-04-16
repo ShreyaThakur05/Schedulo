@@ -23,7 +23,7 @@
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
   body {
-    background-color: #f0f0ff;
+    background-color: #f0f4ff;
     color: #1e1b4b;
     font-family: Inter, system-ui, sans-serif;
     font-feature-settings: "cv02","cv03","cv04","cv11";
