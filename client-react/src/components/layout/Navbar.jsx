@@ -8,11 +8,11 @@ function CalendlyMark() {
   const { theme } = useTheme();
   const isLight = theme === 'light';
   return (
-    <div className={isLight ? 'bg-white rounded-xl px-3 py-2 mt-2' : ''}>
+    <div className={isLight ? 'bg-white rounded-lg px-2 py-0' : ''}>
       <img
         src="/calendly-logo.png"
         alt="Calendly"
-        className="h-20 w-auto object-contain"
+        className="h-10 w-auto object-contain"
       />
     </div>
   );
@@ -133,7 +133,7 @@ export default function Sidebar() {
     <>
       {/* Desktop sidebar */}
       <aside className="fixed left-0 top-0 h-full w-56 bg-gradient-to-b from-[#006BFF] via-[#0052CC] to-[#003D99] dark:bg-none dark:bg-[#16161f] border-r border-blue-400/20 dark:border-[#2a2a3a] flex-col z-40 hidden md:flex">
-        <div className="h-20 flex items-start px-4 pt-3 border-b border-white/10 dark:border-[#2a2a3a]">
+        <div className="h-16 flex items-center px-4 border-b border-white/10 dark:border-[#2a2a3a]">
           <NavLink to="/dashboard" className="flex items-center">
             <CalendlyMark />
           </NavLink>
