@@ -1,10 +1,10 @@
-# Schedulo
+# Schedulo (Calendly Clone)
 
 A professional scheduling platform — share your availability and let anyone book a meeting in seconds. No back-and-forth emails required.
 
 🔗 **Live Demo**
-- Frontend: [https://schedulo-app.vercel.app](https://schedulo-app.vercel.app)
-- API: [https://schedulo-api.onrender.com](https://schedulo-api.onrender.com)
+- Frontend: [https://schedulo-chi.vercel.app](https://schedulo-chi.vercel.app)
+- API: [https://schedulo-ssnc.onrender.com](https://schedulo-ssnc.onrender.com)
 
 ---
 
@@ -44,16 +44,16 @@ A professional scheduling platform — share your availability and let anyone bo
 
 ### ✅ Availability Settings
 - Toggle available days of the week
-- Set start/end time per day (15-min granularity)
+- Set start/end time per day with custom scrollable dropdown (no overflow)
 - Timezone selector (stored per user)
 - Quick presets (Weekdays 9–5, Mon–Fri 8–6, Every day 10–6)
-- **Date-specific overrides** — block a day or set custom hours
+- **Date-specific overrides** — block a day or set custom hours for any date
 
 ### ✅ Public Booking Page
-- 3-column layout: host info | calendar | time slots
+- 3-column layout: host info | calendar | time slots (always visible)
 - Month calendar (only available dates selectable)
 - Time slots update when date is selected
-- Timezone auto-detected from browser
+- Timezone auto-detected from browser (`Intl.DateTimeFormat`)
 - Booking form: name + email
 - Atomic double-booking prevention (DB transaction)
 - Confirmation screen with **Add to Google Calendar** link
@@ -66,12 +66,18 @@ A professional scheduling platform — share your availability and let anyone bo
 - Date range filter
 - Export CSV
 - Cancel meeting (confirmation modal)
-- Reschedule meeting (conflict-checked)
+- **Reschedule meeting** (conflict-checked, new datetime picker)
 - Add to Google Calendar link per meeting
+
+### ✅ Email Notifications
+- **Booking confirmation** — styled HTML email with correct IST timezone
+- **Reschedule notification** — shows old time (struck through) and new time
+- **Cancellation notification** — sent to invitee on cancel
+- Calendly-style blue gradient header design in all emails
 
 ### ✅ Analytics
 - Total, confirmed, cancelled meetings
-- Conversion rate (page views → bookings)
+- **Conversion rate** (page views → bookings) overall and per event type
 - By event kind breakdown (1:1, Group, Webinar, Interview)
 - Daily bookings chart (last 30 days)
 - Busiest days of week chart
@@ -79,13 +85,14 @@ A professional scheduling platform — share your availability and let anyone bo
 
 ### ✅ Google Calendar Integration
 - OAuth 2.0 connect/disconnect
-- Real-time busy slot sync
-- Connected account shown in Settings
+- Real-time busy slot sync — Google Calendar events block available slots
+- Connected account shown in app
 
 ### ✅ UI / UX
-- Light & dark theme toggle (class-based, persisted)
-- Indigo/violet gradient sidebar in light mode
-- Fully responsive — mobile hamburger drawer
+- Light & dark theme toggle (class-based, persisted, defaults to light)
+- Calendly blue (`#006BFF`) gradient sidebar in light mode
+- Calendly brand mark logo
+- Fully responsive — mobile hamburger drawer, desktop sidebar
 - Framer Motion animations
 - Toast notifications
 
@@ -123,12 +130,12 @@ PORT=4000
 FRONTEND_URL="http://localhost:3000"
 SEED_USER_ID="00000000-0000-0000-0000-000000000001"
 
-# Email (optional)
+# Email (optional — uses Gmail App Password)
 SMTP_HOST="smtp.gmail.com"
 SMTP_PORT="587"
 SMTP_USER="your@gmail.com"
-SMTP_PASS="your-app-password"
-SMTP_FROM="Schedulo <your@gmail.com>"
+SMTP_PASS="your-16-char-app-password"
+SMTP_FROM="Calendly <your@gmail.com>"
 
 # Google Calendar OAuth (optional)
 GOOGLE_CLIENT_ID=""
@@ -161,6 +168,8 @@ cd client-react && npm run dev
 
 Open `http://localhost:3000`
 
+> The server also auto-seeds on first boot if no user exists — no manual seed step needed on Render/production.
+
 ---
 
 ## Key URLs
@@ -171,7 +180,6 @@ Open `http://localhost:3000`
 | `/availability` | Set weekly schedule + date overrides |
 | `/meetings` | View/cancel/reschedule meetings |
 | `/analytics` | Booking analytics & conversion rates |
-| `/settings` | Google Calendar integration |
 | `/book/30-min-chat` | Public booking page |
 | `/book/60-min-deep-dive` | Public booking page |
 | `/book/15-min-intro` | Public booking page |
@@ -225,7 +233,7 @@ DELETE /gcal/disconnect              Disconnect Google Calendar
 - Framework: Vite
 - Build command: `npm run build`
 - Output directory: `dist`
-- Add env var: `VITE_API_URL=https://your-api.onrender.com/api/v1`
+- Add env var: `VITE_API_URL=https://schedulo-ssnc.onrender.com/api/v1`
 
 ### Database → Railway
 - Deploy MySQL on [railway.app](https://railway.app)
@@ -240,7 +248,7 @@ Schedulo/
 ├── server-js/                 # Express API (plain JavaScript)
 │   ├── prisma/
 │   │   ├── schema.prisma      # DB schema
-│   │   └── seed.js            # Demo data
+│   │   └── seed.js            # Demo data (Indian names, auto-runs on boot)
 │   └── src/
 │       ├── config/            # db.js, env.js
 │       ├── controllers/       # eventType, availability, meeting,
@@ -249,6 +257,8 @@ Schedulo/
 │       ├── routes/            # All route files
 │       └── services/          # slotCalculator, emailService
 └── client-react/              # React 19 + Vite (plain JavaScript)
+    ├── public/
+    │   └── calendly-logo.png  # Calendly brand mark
     ├── src/
     │   ├── components/
     │   │   ├── features/      # AvailabilityEditor, BookingCalendar,
@@ -261,7 +271,7 @@ Schedulo/
     │   ├── lib/               # api.js, queryClient.js, utils.js, theme.jsx
     │   └── pages/
     │       ├── admin/         # Dashboard, Availability, Meetings,
-    │       │                  # Analytics, Settings, AdminLayout
+    │       │                  # Analytics, AdminLayout
     │       └── book/          # BookingPage
     └── vercel.json            # SPA routing config
 ```
@@ -271,9 +281,10 @@ Schedulo/
 ## Assumptions
 
 - Single default user (no auth) — `SEED_USER_ID` in `.env`
-- Slot granularity: 15 minutes
-- One availability rule per day of week
-- All times stored as UTC; frontend converts using `Intl.DateTimeFormat`
+- Slot granularity: 30 minutes (custom dropdown, no overflow on any screen)
+- One availability rule per day of week; date-specific overrides for exceptions
+- All times stored as UTC; emails formatted in IST (`Asia/Kolkata`); frontend converts using `Intl.DateTimeFormat`
 - Conflict check scoped to same event type
 - Soft-delete for event types (preserves meeting history)
 - Google Calendar sync reads primary calendar only (read-only scope)
+- Auto-seed runs on first server boot if no user exists
