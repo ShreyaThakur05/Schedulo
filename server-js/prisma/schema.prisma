@@ -1,0 +1,89 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                      String                 @id @default(uuid()) @db.VarChar(36)
+  name                    String                 @db.VarChar(100)
+  email                   String                 @unique @db.VarChar(255)
+  timezone                String                 @default("UTC") @db.VarChar(100)
+  googleCalendarToken     String?                @map("google_calendar_token") @db.Text
+  googleCalendarRefresh   String?                @map("google_calendar_refresh") @db.Text
+  googleCalendarEmail     String?                @map("google_calendar_email") @db.VarChar(255)
+  createdAt               DateTime               @default(now()) @map("created_at") @db.DateTime(0)
+  eventTypes              EventType[]
+  availabilityRules       AvailabilityRule[]
+  availabilityOverrides   AvailabilityOverride[]
+
+  @@map("users")
+}
+
+model EventType {
+  id              String    @id @default(uuid()) @db.VarChar(36)
+  userId          String    @map("user_id") @db.VarChar(36)
+  name            String    @db.VarChar(100)
+  slug            String    @unique @db.VarChar(100)
+  durationMinutes Int       @map("duration_minutes")
+  bufferMinutes   Int       @default(0) @map("buffer_minutes")
+  maxPerDay       Int?      @map("max_per_day")
+  eventKind       String    @default("ONE_ON_ONE") @map("event_kind") @db.VarChar(20)
+  description     String?   @db.VarChar(1000)
+  color           String    @default("#6366f1") @db.VarChar(7)
+  isActive        Boolean   @default(true) @map("is_active")
+  pageViews       Int       @default(0) @map("page_views")
+  createdAt       DateTime  @default(now()) @map("created_at") @db.DateTime(0)
+  updatedAt       DateTime  @default(now()) @updatedAt @map("updated_at") @db.DateTime(0)
+  user            User      @relation(fields: [userId], references: [id])
+  meetings        Meeting[]
+
+  @@map("event_types")
+}
+
+model AvailabilityRule {
+  id        String  @id @default(uuid()) @db.VarChar(36)
+  userId    String  @map("user_id") @db.VarChar(36)
+  dayOfWeek Int     @map("day_of_week")
+  startTime String  @map("start_time") @db.VarChar(8)
+  endTime   String  @map("end_time") @db.VarChar(8)
+  timezone  String  @db.VarChar(100)
+  isActive  Boolean @default(true) @map("is_active")
+  user      User    @relation(fields: [userId], references: [id])
+
+  @@unique([userId, dayOfWeek])
+  @@map("availability_rules")
+}
+
+model AvailabilityOverride {
+  id        String   @id @default(uuid()) @db.VarChar(36)
+  userId    String   @map("user_id") @db.VarChar(36)
+  date      String   @map("date") @db.VarChar(10)
+  startTime String?  @map("start_time") @db.VarChar(8)
+  endTime   String?  @map("end_time") @db.VarChar(8)
+  isBlocked Boolean  @default(false) @map("is_blocked")
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@unique([userId, date])
+  @@map("availability_overrides")
+}
+
+model Meeting {
+  id                 String    @id @default(uuid()) @db.VarChar(36)
+  eventTypeId        String    @map("event_type_id") @db.VarChar(36)
+  inviteeName        String    @map("invitee_name") @db.VarChar(100)
+  inviteeEmail       String    @map("invitee_email") @db.VarChar(255)
+  startTime          DateTime  @map("start_time") @db.DateTime(0)
+  endTime            DateTime  @map("end_time") @db.DateTime(0)
+  status             String    @default("CONFIRMED") @db.VarChar(20)
+  cancellationReason String?   @map("cancellation_reason") @db.VarChar(1000)
+  createdAt          DateTime  @default(now()) @map("created_at") @db.DateTime(0)
+  eventType          EventType @relation(fields: [eventTypeId], references: [id])
+
+  @@index([eventTypeId, status, startTime])
+  @@index([startTime, endTime])
+  @@map("meetings")
+}
