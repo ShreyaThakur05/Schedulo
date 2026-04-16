@@ -89,17 +89,6 @@ export default function Settings() {
           <p className="text-xs text-indigo-300 dark:text-[#555570] mb-5">Connect your calendar to sync real-time availability and prevent double bookings.</p>
           <GCalCard />
         </div>
-        <div className="bg-amber-50 dark:bg-amber-900/10 border border-amber-200 dark:border-amber-800/30 rounded-2xl p-5">
-          <h3 className="font-semibold text-amber-800 dark:text-amber-400 text-sm mb-2">Google Calendar Setup</h3>
-          <ol className="text-xs text-amber-700 dark:text-amber-500 space-y-1.5 list-decimal list-inside">
-            <li>Go to <strong>Google Cloud Console</strong> → APIs &amp; Services → Credentials</li>
-            <li>Create an <strong>OAuth 2.0 Client ID</strong> (Web application)</li>
-            <li>Add redirect URI: <code className="bg-amber-100 dark:bg-amber-900/30 px-1 rounded">https://schedulo-ssnc.onrender.com/api/v1/gcal/callback</code></li>
-            <li>Enable the <strong>Google Calendar API</strong> in your project</li>
-            <li>Add <code className="bg-amber-100 dark:bg-amber-900/30 px-1 rounded">GOOGLE_CLIENT_ID</code> and <code className="bg-amber-100 dark:bg-amber-900/30 px-1 rounded">GOOGLE_CLIENT_SECRET</code> to Render environment variables</li>
-            <li>Redeploy on Render, then click Connect above</li>
-          </ol>
-        </div>
       </div>
     </>
   );

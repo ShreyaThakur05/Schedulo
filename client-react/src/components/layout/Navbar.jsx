@@ -5,7 +5,7 @@ import { cn } from '../../lib/utils';
 
 // Real Calendly logo loaded from public/calendly-logo.png
 const CalendlyMark = () => (
-  <img src="/calendly-logo.png" alt="Calendly" className="h-7 w-auto" style={{ filter: 'brightness(0) invert(1)' }} />
+  <img src="/calendly-logo.png" alt="Calendly" className="h-36 w-auto" style={{ filter: 'brightness(0) invert(1)' }} />
 );
 
 // Theme-adaptive nav icons
