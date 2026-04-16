@@ -8,8 +8,8 @@ function CalendlyMark() {
   const { theme } = useTheme();
   const isLight = theme === 'light';
   return (
-    <div className={isLight ? 'bg-white rounded-xl px-3 py-2' : ''}>
-      <img src="/calendly-logo.png" alt="Calendly" className="h-14 w-auto object-contain" />
+    <div className={isLight ? 'bg-white rounded-lg px-4 py-1' : ''}>
+      <img src="/calendly-logo.png" alt="Calendly" className="h-20 w-auto object-contain" />
     </div>
   );
 }
