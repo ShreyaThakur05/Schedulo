@@ -1,6 +1,6 @@
 const { addMinutes } = require('date-fns');
 const prisma = require('../config/db');
-const { sendConfirmationEmail, sendCancellationEmail } = require('../services/emailService');
+const { sendConfirmationEmail, sendRescheduleEmail, sendCancellationEmail } = require('../services/emailService');
 
 const listMeetings = async (req, res, next) => {
   try {
@@ -60,12 +60,13 @@ const rescheduleMeeting = async (req, res, next) => {
     const { newStartTime } = req.body;
     const meeting = await prisma.meeting.findFirst({
       where: { id: req.params.id, eventType: { userId: req.userId }, status: 'CONFIRMED' },
-      include: { eventType: true },
+      include: { eventType: { include: { user: true } } },
     });
     if (!meeting) return res.status(404).json({ error: 'NOT_FOUND', message: 'Meeting not found.' });
     const start = new Date(newStartTime);
     if (start <= new Date()) return res.status(400).json({ error: 'PAST_DATE', message: 'Cannot reschedule to a past time.' });
     const end = addMinutes(start, meeting.eventType.durationMinutes);
+    const oldStartTime = meeting.startTime.toISOString();
     const updated = await prisma.$transaction(async (tx) => {
       const conflict = await tx.meeting.findFirst({
         where: { eventTypeId: meeting.eventTypeId, status: 'CONFIRMED', id: { not: meeting.id }, startTime: { lt: end }, endTime: { gt: start } },
@@ -77,6 +78,15 @@ const rescheduleMeeting = async (req, res, next) => {
         include: { eventType: { select: { name: true, color: true, durationMinutes: true, eventKind: true } } },
       });
     });
+    sendRescheduleEmail(meeting.inviteeEmail, {
+      inviteeName: meeting.inviteeName,
+      eventName: meeting.eventType.name,
+      hostName: meeting.eventType.user.name,
+      oldStartTime,
+      newStartTime: start.toISOString(),
+      newEndTime: end.toISOString(),
+      timezone: meeting.eventType.user.timezone || 'Asia/Kolkata',
+    }).catch(console.error);
     res.json({ data: updated });
   } catch (e) { next(e); }
 };

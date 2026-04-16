@@ -3,10 +3,16 @@ import { NavLink } from 'react-router-dom';
 import { useTheme } from '../../lib/theme';
 import { cn } from '../../lib/utils';
 
-// Logo — no padding box, flush with sidebar, fills header height
-const CalendlyMark = () => (
-  <img src="/calendly-logo.png" alt="Calendly" className="h-11 w-auto object-contain object-left" />
-);
+// Logo — white pill in light mode (blue logo needs contrast), bare in dark mode
+function CalendlyMark() {
+  const { theme } = useTheme();
+  const isLight = theme === 'light';
+  return (
+    <div className={isLight ? 'bg-white rounded-xl px-3 py-2' : ''}>
+      <img src="/calendly-logo.png" alt="Calendly" className="h-14 w-auto object-contain" />
+    </div>
+  );
+}
 
 // Theme-adaptive nav icons
 const IconGrid = ({ active }) => (
@@ -134,7 +140,7 @@ export default function Sidebar() {
       {/* Mobile top bar */}
       <div className="md:hidden fixed top-0 left-0 right-0 z-50 h-14 bg-gradient-to-r from-[#006BFF] to-[#0052CC] dark:bg-none dark:bg-[#16161f] border-b border-blue-400/20 dark:border-[#2a2a3a] flex items-center justify-between px-4">
         <NavLink to="/dashboard" className="flex items-center">
-          <img src="/calendly-logo.png" alt="Calendly" className="h-8 w-auto object-contain" />
+          <CalendlyMark />
         </NavLink>
         <div className="flex items-center gap-1">
           <ThemeToggle />
@@ -151,7 +157,7 @@ export default function Sidebar() {
           <div className="relative w-64 bg-gradient-to-b from-[#006BFF] via-[#0052CC] to-[#003D99] dark:bg-none dark:bg-[#16161f] h-full flex flex-col shadow-2xl">
             <div className="h-14 flex items-center justify-between px-4 border-b border-white/10 dark:border-[#2a2a3a]">
               <NavLink to="/dashboard" className="flex items-center" onClick={() => setMobileOpen(false)}>
-                <img src="/calendly-logo.png" alt="Calendly" className="h-8 w-auto object-contain" />
+                <CalendlyMark />
               </NavLink>
               <button onClick={() => setMobileOpen(false)} className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white/10 text-white">
                 <IconX />
