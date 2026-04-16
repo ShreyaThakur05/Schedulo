@@ -3,11 +3,9 @@ import { NavLink } from 'react-router-dom';
 import { useTheme } from '../../lib/theme';
 import { cn } from '../../lib/utils';
 
-// Logo wrapped in white bg so blue+cyan both show against the blue sidebar
+// Logo — no padding box, flush with sidebar, fills header height
 const CalendlyMark = () => (
-  <div className="bg-white rounded-xl px-3 py-1.5">
-    <img src="/calendly-logo.png" alt="Calendly" className="h-8 w-auto" />
-  </div>
+  <img src="/calendly-logo.png" alt="Calendly" className="h-11 w-auto object-contain object-left" />
 );
 
 // Theme-adaptive nav icons
@@ -42,12 +40,7 @@ const IconChart = ({ active }) => (
     {active && <path d="M3 14.5l3.5-4.5 3 3 4-5.5 3 3V17H3z" fill="currentColor" fillOpacity="0.1"/>}
   </svg>
 );
-const IconSettings = ({ active }) => (
-  <svg viewBox="0 0 20 20" fill="none" className="h-[18px] w-[18px]" strokeWidth="1.7">
-    <circle cx="10" cy="10" r="2.5" stroke="currentColor" fill={active ? 'currentColor' : 'none'} fillOpacity={active ? '0.2' : '0'}/>
-    <path d="M10 2v2M10 16v2M2 10h2M16 10h2M4.22 4.22l1.42 1.42M14.36 14.36l1.42 1.42M4.22 15.78l1.42-1.42M14.36 5.64l1.42-1.42" stroke="currentColor" strokeLinecap="round"/>
-  </svg>
-);
+const IconSettings = ({ active }) => null;
 const IconSun = () => (
   <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4" strokeWidth="1.8">
     <circle cx="10" cy="10" r="3.5" stroke="currentColor" fill="currentColor" fillOpacity="0.2"/>
@@ -75,7 +68,6 @@ const navLinks = [
   { to: '/availability', label: 'Availability', Icon: IconClock },
   { to: '/meetings',     label: 'Meetings',     Icon: IconCalendar },
   { to: '/analytics',    label: 'Analytics',    Icon: IconChart },
-  { to: '/settings',     label: 'Settings',     Icon: IconSettings },
 ];
 
 function ThemeToggle() {
@@ -131,8 +123,8 @@ export default function Sidebar() {
     <>
       {/* Desktop sidebar */}
       <aside className="fixed left-0 top-0 h-full w-56 bg-gradient-to-b from-[#006BFF] via-[#0052CC] to-[#003D99] dark:bg-none dark:bg-[#16161f] border-r border-blue-400/20 dark:border-[#2a2a3a] flex-col z-40 hidden md:flex">
-        <div className="h-16 flex items-center px-4 border-b border-white/10 dark:border-[#2a2a3a]">
-          <NavLink to="/dashboard" className="flex items-center px-1">
+        <div className="h-20 flex items-center px-4 border-b border-white/10 dark:border-[#2a2a3a]">
+          <NavLink to="/dashboard" className="flex items-center">
             <CalendlyMark />
           </NavLink>
         </div>
@@ -142,7 +134,7 @@ export default function Sidebar() {
       {/* Mobile top bar */}
       <div className="md:hidden fixed top-0 left-0 right-0 z-50 h-14 bg-gradient-to-r from-[#006BFF] to-[#0052CC] dark:bg-none dark:bg-[#16161f] border-b border-blue-400/20 dark:border-[#2a2a3a] flex items-center justify-between px-4">
         <NavLink to="/dashboard" className="flex items-center">
-          <CalendlyMark />
+          <img src="/calendly-logo.png" alt="Calendly" className="h-8 w-auto object-contain" />
         </NavLink>
         <div className="flex items-center gap-1">
           <ThemeToggle />
@@ -159,7 +151,7 @@ export default function Sidebar() {
           <div className="relative w-64 bg-gradient-to-b from-[#006BFF] via-[#0052CC] to-[#003D99] dark:bg-none dark:bg-[#16161f] h-full flex flex-col shadow-2xl">
             <div className="h-14 flex items-center justify-between px-4 border-b border-white/10 dark:border-[#2a2a3a]">
               <NavLink to="/dashboard" className="flex items-center" onClick={() => setMobileOpen(false)}>
-                <CalendlyMark />
+                <img src="/calendly-logo.png" alt="Calendly" className="h-8 w-auto object-contain" />
               </NavLink>
               <button onClick={() => setMobileOpen(false)} className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white/10 text-white">
                 <IconX />

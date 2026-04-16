@@ -50,7 +50,7 @@ const createMeeting = async (req, res, next) => {
         include: { eventType: { include: { user: { select: { name: true } } } } },
       });
     });
-    sendConfirmationEmail(inviteeEmail, { inviteeName, eventName: eventType.name, startTime: start.toISOString(), endTime: end.toISOString(), hostName: eventType.user.name }).catch(console.error);
+    sendConfirmationEmail(inviteeEmail, { inviteeName, eventName: eventType.name, startTime: start.toISOString(), endTime: end.toISOString(), hostName: eventType.user.name, timezone: eventType.user.timezone || 'Asia/Kolkata' }).catch(console.error);
     res.status(201).json({ data: meeting });
   } catch (e) { next(e); }
 };
@@ -86,12 +86,12 @@ const cancelMeeting = async (req, res, next) => {
     const { cancellationReason } = req.body;
     const meeting = await prisma.meeting.findFirst({
       where: { id: req.params.id, eventType: { userId: req.userId } },
-      include: { eventType: true },
+      include: { eventType: { include: { user: { select: { name: true, timezone: true } } } } },
     });
     if (!meeting) return res.status(404).json({ error: 'NOT_FOUND', message: 'Meeting not found.' });
     if (meeting.status === 'CANCELLED') return res.status(400).json({ error: 'ALREADY_CANCELLED', message: 'Meeting is already cancelled.' });
     const updated = await prisma.meeting.update({ where: { id: req.params.id }, data: { status: 'CANCELLED', cancellationReason } });
-    sendCancellationEmail(meeting.inviteeEmail, { inviteeName: meeting.inviteeName, eventName: meeting.eventType.name, startTime: meeting.startTime.toISOString() }).catch(console.error);
+    sendCancellationEmail(meeting.inviteeEmail, { inviteeName: meeting.inviteeName, eventName: meeting.eventType.name, startTime: meeting.startTime.toISOString(), timezone: meeting.eventType.user?.timezone || 'Asia/Kolkata' }).catch(console.error);
     res.json({ data: updated });
   } catch (e) { next(e); }
 };
